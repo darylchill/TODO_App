@@ -1,3 +1,6 @@
+ <p align="center"><a href="#" target="_blank"><img src="https://github.com/darylchill/TODO_App/blob/main/img.png" width="400" alt="TODO" class='logo' style='mix-blend-mode:multiply'></a></p>
+# Space Dodger
+
 # TODO App
 
 ## About
