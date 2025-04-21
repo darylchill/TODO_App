@@ -25,15 +25,7 @@ class _TodoWidgetState extends ConsumerState<TodoWidget> {
     userEmailFuture = DatabaseHelper().getUserEmail();
   }
 
-  Color getRandomLightColor() {
-    final Random random = Random();
-    return Color.fromARGB(
-      255,
-      200 + random.nextInt(56), // R (200-255)
-      200 + random.nextInt(56), // G (200-255)
-      200 + random.nextInt(56), // B (200-255)
-    );
-  }
+
 
   void _showAddTodoDialog(BuildContext context, WidgetRef ref) {
     final TextEditingController titleController = TextEditingController();
@@ -68,6 +60,8 @@ class _TodoWidgetState extends ConsumerState<TodoWidget> {
             ),
             TextButton(
               onPressed: () async {
+                if (!mounted) return;
+
                 final title = titleController.text.trim();
                 final description = descriptionController.text.trim();
                 if (title.isEmpty) return;
@@ -78,8 +72,8 @@ class _TodoWidgetState extends ConsumerState<TodoWidget> {
                   firstDate: DateTime.now(),
                   lastDate: DateTime(2101),
                 );
-                if (pickedDate == null) return;
 
+               
                 TimeOfDay? pickedTime = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),
@@ -90,7 +84,7 @@ class _TodoWidgetState extends ConsumerState<TodoWidget> {
                 int alarmId = utf8.encode(id).reduce((a, b) => a + b) % 1000000;
 
                 DateTime finalDateTime = DateTime(
-                  pickedDate.year,
+                  pickedDate!.year,
                   pickedDate.month,
                   pickedDate.day,
                   pickedTime.hour,
@@ -107,6 +101,8 @@ class _TodoWidgetState extends ConsumerState<TodoWidget> {
 
                 ref.read(addTodoProvider)(newTodo);
                 AlarmUtil.setTodoAlarm(alarmId, finalDateTime, title, title);
+
+                if (!mounted) return;
                 Navigator.pop(context);
               },
               child: const Text("Add"),
@@ -199,6 +195,16 @@ class _TodoWidgetState extends ConsumerState<TodoWidget> {
     );
   }
 }
+
+  Color getRandomLightColor() {
+    final Random random = Random();
+    return Color.fromARGB(
+      255,
+      200 + random.nextInt(56), // R (200-255)
+      200 + random.nextInt(56), // G (200-255)
+      200 + random.nextInt(56), // B (200-255)
+    );
+  }
 
 String formatDateTime(DateTime dateTime) {
   return "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} "

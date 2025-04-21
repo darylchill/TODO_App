@@ -1,7 +1,7 @@
-import 'dart:io';
 
 import 'package:alarm/model/volume_settings.dart';
 import 'package:alarm/alarm.dart';
+import 'package:flutter_todo_app/constant/files.dart';
 
 class AlarmUtil {
   static Future initialize() async {
@@ -12,9 +12,13 @@ class AlarmUtil {
     final alarmSettings = AlarmSettings(
       id: id,
       dateTime: dateTime,
-      assetAudioPath: 'assets/alarm.wav',
+      assetAudioPath: audioFile,
       loopAudio: true,
       vibrate: true,
+      //-> Add this new 2 
+      androidFullScreenIntent: true,
+      allowAlarmOverlap: true,
+      //
       volumeSettings: VolumeSettings.fade(
         volume: 0.8,
         fadeDuration: Duration(seconds: 5),
@@ -24,7 +28,7 @@ class AlarmUtil {
         title: title,
         body: body,
         stopButton: 'Stop Alarm',
-        icon: 'notification_icon',
+        icon: notification_icon,
       ),
     );
     Alarm.set(alarmSettings: alarmSettings);
